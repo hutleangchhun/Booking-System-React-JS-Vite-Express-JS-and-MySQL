@@ -1,0 +1,7 @@
+User Acc
+
+user admin
+pass 12345
+
+user user
+pass 12345
