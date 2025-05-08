@@ -74,6 +74,7 @@ const UnitList = () => {
                 await deleteUnit(unitId);
                 setUnits(units.filter(unit => unit.id !== unitId));
                 Swal.fire('Deleted!', `${unitName} has been deleted.`, 'success');
+                fetchAllUnits();
             }
         } catch (error) {
             console.error('Error deleting unit:', error);

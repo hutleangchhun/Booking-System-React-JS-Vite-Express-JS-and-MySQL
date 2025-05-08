@@ -92,92 +92,99 @@ const BookingForm = ({ mode, booking = {}, onSuccess }) => {
     };
 
     return (
-        <form onSubmit={handleSubmit} className="space-y-4 text-sm text-gray-700">
-            {/* Customer Dropdown */}
-            <div>
-                <label className="block mb-1 font-medium">Customer</label>
-                <select
-                    name="customer_id"
-                    value={formData.customer_id}
-                    onChange={handleChange}
-                    className="w-full border border-gray-300 p-2 rounded"
-                    required
+        <>
+            <h1 className='text-base font-bold mb-5 pb-2 capitalize text-gray-700 border-b-2 border-gray-300'>
+                {mode === 'create' ? 'Add New Booking' : 'Update Booking'}
+            </h1>
+            <form onSubmit={handleSubmit} className="space-y-4 text-sm text-gray-700">
+                {/* Customer Dropdown */}
+                <div className='grid grid-cols-2 gap-6'>
+                    <div className=''>
+                        <label className="block text-gray-700 font-semibold mb-2">Customer</label>
+                        <select
+                            name="customer_id"
+                            value={formData.customer_id}
+                            onChange={handleChange}
+                            className="w-full border border-gray-300 bg-transparent p-2 rounded focus:outline-none"
+                            required
+                        >
+                            <option value="">Select Customer</option>
+                            {customers.map((customer) => (
+                                <option key={customer.id} value={customer.id}>
+                                    {customer.username}({customer.email})
+                                </option>
+                            ))}
+                        </select>
+                    </div>
+
+                    {/* Unit Dropdown */}
+                    <div className=''>
+                        <label className="block text-gray-700 font-semibold mb-2">Unit</label>
+                        <select
+                            name="unit_id"
+                            value={formData.unit_id}
+                            onChange={handleChange}
+                            className="w-full border border-gray-300 bg-transparent p-2 rounded focus:outline-none"
+                            required
+                        >
+                            <option value="">Select Unit</option>
+                            {units.map((unit) => (
+                                <option key={unit.id} value={unit.id}>
+                                    {unit.unit_name} ({unit.unit_type})
+                                </option>
+                            ))}
+                        </select>
+                    </div>
+                </div>
+
+                {/* Guest Name */}
+                <div className='mb-4'>
+                    <label className="block text-gray-700 font-semibold mb-2">Guest Name</label>
+                    <input
+                        type="text"
+                        name="guest_name"
+                        value={formData.guest_name}
+                        onChange={handleChange}
+                        className="w-full border border-gray-300 p-2 rounded"
+                        required
+                    />
+                </div>
+
+                {/* Check-in Date and Time */}
+                <div className='mb-4'>
+                    <label className="block text-gray-700 font-semibold mb-2">Check-in</label>
+                    <input
+                        type="datetime-local"
+                        name="check_in"
+                        value={formData.check_in}
+                        onChange={handleChange}
+                        className="w-full border border-gray-300 p-2 rounded"
+                        required
+                    />
+                </div>
+
+                {/* Check-out Date and Time */}
+                <div className='pb-4'>
+                    <label className="block text-gray-700 font-semibold mb-2">Check-out</label>
+                    <input
+                        type="datetime-local"
+                        name="check_out"
+                        value={formData.check_out}
+                        onChange={handleChange}
+                        className="w-full border border-gray-300 p-2 rounded"
+                        required
+                    />
+                </div>
+
+                {/* Submit Button */}
+                <button
+                    type="submit"
+                    className="w-full bg-blue-600 text-white p-2 rounded hover:bg-blue-700 duration-300"
                 >
-                    <option value="">Select Customer</option>
-                    {customers.map((customer) => (
-                        <option key={customer.id} value={customer.id}>
-                            {customer.username}({customer.email})
-                        </option>
-                    ))}
-                </select>
-            </div>
-
-            {/* Unit Dropdown */}
-            <div>
-                <label className="block mb-1 font-medium">Unit</label>
-                <select
-                    name="unit_id"
-                    value={formData.unit_id}
-                    onChange={handleChange}
-                    className="w-full border border-gray-300 p-2 rounded"
-                    required
-                >
-                    <option value="">Select Unit</option>
-                    {units.map((unit) => (
-                        <option key={unit.id} value={unit.id}>
-                            {unit.unit_name} ({unit.unit_type})
-                        </option>
-                    ))}
-                </select>
-            </div>
-
-            {/* Guest Name */}
-            <div>
-                <label className="block mb-1 font-medium">Guest Name</label>
-                <input
-                    type="text"
-                    name="guest_name"
-                    value={formData.guest_name}
-                    onChange={handleChange}
-                    className="w-full border border-gray-300 p-2 rounded"
-                    required
-                />
-            </div>
-
-            {/* Check-in Date and Time */}
-            <div>
-                <label className="block mb-1 font-medium">Check-in</label>
-                <input
-                    type="datetime-local"
-                    name="check_in"
-                    value={formData.check_in}
-                    onChange={handleChange}
-                    className="w-full border border-gray-300 p-2 rounded"
-                    required
-                />
-            </div>
-
-            {/* Check-out Date and Time */}
-            <div>
-                <label className="block mb-1 font-medium">Check-out</label>
-                <input
-                    type="datetime-local"
-                    name="check_out"
-                    value={formData.check_out}
-                    onChange={handleChange}
-                    className="w-full border border-gray-300 p-2 rounded"
-                    required
-                />
-            </div>
-
-            {/* Submit Button */}
-            <button
-                type="submit"
-                className="w-full bg-blue-600 text-white p-2 rounded hover:bg-blue-700 duration-300"
-            >
-                {mode === 'create' ? 'Create Booking' : 'Update Booking'}
-            </button>
-        </form>
+                    {mode === 'create' ? 'Create Booking' : 'Update Booking'}
+                </button>
+            </form>
+        </>
     );
 };
 

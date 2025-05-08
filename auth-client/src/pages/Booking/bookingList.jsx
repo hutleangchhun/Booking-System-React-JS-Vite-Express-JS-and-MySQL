@@ -70,6 +70,7 @@ const BookingList = () => {
                 await deleteBooking(booking_id);
                 setBookings(bookings.filter(b => b.id !== booking_id));
                 Swal.fire('Deleted!', `Booking for ${guestName} has been deleted.`, 'success');
+                fetchBookings();
             }
         } catch (error) {
             console.error('Delete error:', error);
