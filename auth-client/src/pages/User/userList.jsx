@@ -7,13 +7,13 @@ import Swal from 'sweetalert2';
 import Loading from '../../components/Loading/Loading';
 import Pagination from '../../components/Pagination/Pagination';
 import ErrorMessage from '../../components/Error/ErrorMessage';
-import Modal from '../../components/Modal/userModal';
+import Modal from '../../components/Modal/Modal';
 import UserForm from '../../components/Form/userForm';
 
 const UserList = () => {
     // === HOOKS ===
     const [users, setUsers] = useState([]);
-    const [role, setRole] = useState(null);  // Role state to hold the logged-in user's role
+    const [role, setRole] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [currentPage, setCurrentPage] = useState(1);
@@ -101,34 +101,55 @@ const UserList = () => {
     // === RETURN ===
     return (
         <div className="p-2">
-            <div className="flex justify-between items-center mb-4">
-                <h1 className="text-xl font-bold text-blue-700">List of Users</h1>
+            <div className="flex justify-between items-center mb-2">
+                <h1 className="text-base font-bold text-gray-700">List of Users</h1>
                 {role === 'admin' && (
                     <button
                         onClick={openCreateModal}
                         className="rounded-full bg-blue-500 hover:bg-blue-700 text-white p-3 duration-300"
                     >
-                        <Icon name="add" className="text-white text-xl" />
+                        <Icon name="add" className="text-white text-lg" />
                     </button>
                 )}
             </div>
 
             <div className="overflow-x-auto">
                 <table className="min-w-full border border-gray-200 rounded-md shadow-sm">
-                    <thead className="bg-blue-400 bg-opacity-30 text-blue-600 text-base">
+                    <thead className="bg-blue-400 bg-opacity-30 text-blue-600 text-sm">
                         <tr>
                             <th className="text-left p-3 border-b">Username</th>
+                            <th className="text-left p-3 border-b">Email</th>
                             <th className="text-left p-3 border-b">Role</th>
                             {role === 'admin' && (
-                                <th className="p-3 border-b text-center">Actions</th>
+                                <th className="p-3 text-center">Account Statues</th>
+                            )}
+                            {role === 'admin' && (
+                                <th className="p-3 text-center">Actions</th>
                             )}
                         </tr>
                     </thead>
-                    <tbody className="font-medium text-gray-700 text-base">
+                    <tbody className="font-medium text-gray-700 text-sm">
                         {currentUsers.map((user) => (
                             <tr key={user.id} className="hover:bg-blue-50">
-                                <td className="p-3 border-b">{user.username}</td>
-                                <td className="p-3 border-b">{user.role}</td>
+                                <td className="p-3">{user.username}</td>
+                                <td className="p-3">{user.email}</td>
+                                <td className="p-3">{user.role}</td>
+                                {role === 'admin' && (
+                                    <td className="p-3">
+                                        <div className="flex justify-center items-center">
+                                            {user.isVerified ? (
+                                                <span className="text-xl">
+                                                    <Icon name="checkMark" className="text-green-500" />
+                                                </span>
+                                            ) : (
+                                                <span className="text-xl">
+                                                    <Icon name="crossMark" className="text-red-500" />
+                                                </span>
+                                            )}
+                                        </div>
+                                    </td>
+                                )}
+
                                 {role === 'admin' && (
                                     <td className="p-3 border-b text-center space-x-2">
                                         <button

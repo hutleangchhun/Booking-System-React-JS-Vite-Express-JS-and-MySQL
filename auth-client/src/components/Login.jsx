@@ -5,7 +5,7 @@ import { loginUser } from '../Service/userApi'; // Updated import
 import Swal from 'sweetalert2';
 
 export default function Login() {
-    const [form, setForm] = useState({ username: '', password: '' });
+    const [form, setForm] = useState({ email: '', password: '' });
     const navigate = useNavigate();
 
     const handleChange = (e) => {
@@ -40,11 +40,11 @@ export default function Login() {
                 <h2 className="text-2xl font-bold mb-6 text-center">Login</h2>
 
                 <input
-                    name="username"
-                    type="text"
-                    placeholder="Username"
+                    name="email"
+                    type="email"
+                    placeholder="Email"
                     onChange={handleChange}
-                    value={form.username}
+                    value={form.email}
                     required
                     className="w-full px-4 py-2 mb-4 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
                 />

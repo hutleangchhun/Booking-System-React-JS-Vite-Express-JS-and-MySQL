@@ -1,4 +1,3 @@
-// src/components/UserForm/UserForm.jsx
 import React, { useState, useEffect } from 'react';
 import { registerUser, updateUser } from '../../Service/userApi';
 import Swal from 'sweetalert2';
@@ -7,6 +6,7 @@ const UserForm = ({ mode = 'create', user = null, onSuccess }) => {
     const [formData, setFormData] = useState({
         username: '',
         password: '',
+        eamil: "",
         role: 'user',
     });
 
@@ -15,6 +15,7 @@ const UserForm = ({ mode = 'create', user = null, onSuccess }) => {
             setFormData({
                 username: user.username || '',
                 password: '',
+                email: user.email || "",
                 role: user.role || 'user',
             });
         }
@@ -51,51 +52,70 @@ const UserForm = ({ mode = 'create', user = null, onSuccess }) => {
 
 
     return (
-        <form onSubmit={handleSubmit} className="w-full max-w-md mx-auto">
-            <div className="mb-4">
-                <label className="block text-gray-700 font-bold mb-2">Username</label>
-                <input
-                    name="username"
-                    type="text"
-                    value={formData.username}
-                    onChange={handleChange}
-                    className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
-                    required
-                />
-            </div>
+        <>
+            <h1 className='text-base font-bold mb-5 pb-2 capitalize text-gray-700 border-b-2 border-gray-300'>Please fill in user information</h1>
+            <form onSubmit={handleSubmit} className="w-full max-w-xl mx-auto text-sm">
+                <div className='grid grid-cols-2 gap-5'>
+                    <div className="mb-4">
+                        <label className="block text-gray-700 font-semibold mb-2">Username</label>
+                        <input
+                            name="username"
+                            type="text"
+                            value={formData.username}
+                            onChange={handleChange}
+                            className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400 bg-transparent border-gray-300 text-gray-700 font-semibold"
+                            required
+                        />
+                    </div>
+                    <div className="mb-4">
+                        <label className="block text-gray-700 font-semibold mb-2">Role</label>
+                        <select
+                            name="role"
+                            value={formData.role}
+                            onChange={handleChange}
+                            className="w-full px-4 py-2 border rounded-md bg-white focus:outline-none focus:ring-2 focus:ring-blue-400 bg-transparent border-gray-300 text-gray-700 font-semibold"
+                        >
+                            <option value="user">User</option>
+                            <option value="admin">Admin</option>
+                        </select>
+                    </div>
+                </div>
 
-            <div className="mb-4">
-                <label className="block text-gray-700 font-bold mb-2">Password</label>
-                <input
-                    name="password"
-                    type="password"
-                    value={formData.password}
-                    onChange={handleChange}
-                    className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
-                    required={mode === 'create'} // password required only when creating
-                />
-            </div>
+                <div className="mb-4">
+                    <label className="block text-gray-700 font-semibold mb-2">Email</label>
+                    <input
+                        name="email"
+                        type="email"
+                        value={formData.email}
+                        onChange={handleChange}
+                        className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400 bg-transparent border-gray-300 text-gray-700 font-semibold"
+                        required={mode === 'create'} // password required only when creating
+                    />
+                </div>
 
-            <div className="mb-6">
-                <label className="block text-gray-700 font-bold mb-2">Role</label>
-                <select
-                    name="role"
-                    value={formData.role}
-                    onChange={handleChange}
-                    className="w-full px-4 py-2 border rounded-md bg-white focus:outline-none focus:ring-2 focus:ring-blue-400"
-                >
-                    <option value="user">User</option>
-                    <option value="admin">Admin</option>
-                </select>
-            </div>
 
-            <button
-                type="submit"
-                className="w-full bg-blue-500 text-white py-2 rounded-md hover:bg-blue-600 transition duration-200"
-            >
-                {mode === 'create' ? 'Create User' : 'Update User'}
-            </button>
-        </form>
+                <div className="mb-4">
+                    <label className="block text-gray-700 font-semibold mb-2">Password</label>
+                    <input
+                        name="password"
+                        type="password"
+                        value={formData.password}
+                        onChange={handleChange}
+                        className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400 bg-transparent border-gray-300 text-gray-700 font-semibold"
+                        required={mode === 'create'} // password required only when creating
+                    />
+                </div>
+
+                <div className='flex justify-end'>
+                    <button
+                        type="submit"
+                        className=" bg-blue-500 text-white px-4 py-2 font-semibold rounded-md hover:bg-blue-600 transition duration-200"
+                    >
+                        {mode === 'create' ? 'Create User' : 'Update User'}
+                    </button>
+                </div>
+            </form>
+        </>
     );
 };
 

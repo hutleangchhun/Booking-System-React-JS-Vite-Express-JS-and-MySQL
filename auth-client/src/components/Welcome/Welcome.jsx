@@ -11,7 +11,7 @@ export default function Welcome() {
             try {
                 const payload = JSON.parse(atob(token.split('.')[1]));
                 if (payload.username) {
-                    setUsername(payload.username);
+                    setUsername(payload.username);  // Set username from JWT payload
                 }
             } catch (error) {
                 console.error('Invalid token format', error);
@@ -24,7 +24,7 @@ export default function Welcome() {
         if (visible) {
             const timer = setTimeout(() => {
                 setVisible(false);
-            }, 10000);
+            }, 5000);
             return () => clearTimeout(timer);
         }
     }, [visible]);
@@ -32,14 +32,14 @@ export default function Welcome() {
     if (!username || !visible) return null;
 
     return (
-        <div className="relative bg-blue-100 rounded-md p-4 shadow-sm animate-fade-in">
+        <div className="relative bg-blue-100 rounded-md p-4 shadow-sm animate-fade-in mb-4">
             <button
                 onClick={() => setVisible(false)}
                 className="absolute top-2 right-2 text-blue-500 hover:text-blue-700 text-4xl"
             >
                 ×
             </button>
-            <h3 className="text-xl font-semibold text-blue-600">
+            <h3 className="text-base font-semibold text-blue-600">
                 Welcome back, {username}!
             </h3>
         </div>

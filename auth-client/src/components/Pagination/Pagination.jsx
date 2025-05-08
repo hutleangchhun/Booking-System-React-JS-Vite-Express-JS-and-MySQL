@@ -10,23 +10,23 @@ const Pagination = ({ totalUsers, usersPerPage, currentPage, onPageChange }) => 
     }
 
     return (
-        <div className="mt-6 flex justify-end items-center gap-2">
+        <div className="mt-6 flex justify-center items-center gap-2 text-sm">
             <button
                 onClick={() => onPageChange(currentPage - 1)}
                 disabled={currentPage === 1}
-                className={`p-1 rounded transition 
-                    ${currentPage === 1 ? 'bg-gray-300  cursor-not-allowed' : 'bg-blue-600 hover:bg-blue-700 text-white'}`}>
-                <Icon name="pageLeft" className="w-5 h-5" />
+                className={`p-1 rounded-full transition border-2  
+                    ${currentPage === 1 ? 'bg-gray-100 border-blue-500 hover:bg-blue-200  cursor-not-allowed' : 'bg-blue-200 border-blue-500 hover:bg-blue-500'}`}>
+                <Icon name="pageLeft" className="text-md text-blue-700" />
             </button>
 
             {pageNumbers.map((page) => (
                 <button
                     key={page}
                     onClick={() => onPageChange(page)}
-                    className={`px-2 py-1 rounded font-medium transition
+                    className={`px-2 py-1 border-b-2 font-medium transition
                         ${currentPage === page
-                            ? 'bg-blue-600 text-white shadow-md'
-                            : 'bg-gray-100 text-gray-700 hover:bg-blue-100'}`}>
+                            ? 'bg-transparent text-blue-700 border-blue-700'
+                            : 'text-blue-700 hover:border-blue-700'}`}>
                     {page}
                 </button>
             ))}
@@ -34,9 +34,9 @@ const Pagination = ({ totalUsers, usersPerPage, currentPage, onPageChange }) => 
             <button
                 onClick={() => onPageChange(currentPage + 1)}
                 disabled={currentPage === totalPages}
-                className={`p-1 rounded transition 
-                    ${currentPage === totalPages ? 'bg-gray-300 cursor-not-allowed' : 'bg-blue-600 hover:bg-blue-700 text-white'}`}>
-                <Icon name="pageRight" className="w-5 h-5" />
+                className={`p-1 rounded-full transition border-2
+                    ${currentPage === totalPages ? 'bg-gray-100 border-blue-500 hover:bg-blue-200  cursor-not-allowed' : 'bg-blue-200 border-blue-500 hover:bg-blue-500'}`}>
+                <Icon name="pageRight" className="text-md text-blue-700" />
             </button>
         </div>
     );

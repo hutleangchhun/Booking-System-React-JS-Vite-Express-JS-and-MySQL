@@ -8,5 +8,7 @@ router.get('/users/all', userController.fetchAllUsers);
 router.post('/users/create', userController.createUser);
 router.put('/users/update', userController.updateUser);
 router.delete('/users/delete', userController.deleteUser);
+router.get('/users/count', userController.getUserCount);
+
 
 export default router;

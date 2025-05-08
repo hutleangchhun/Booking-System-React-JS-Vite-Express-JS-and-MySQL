@@ -20,4 +20,5 @@ connection.connect((err) => {
     console.log('Connected to MySQL as id ' + connection.threadId);
 });
 
-export default connection;
+// Named export
+export { connection };
