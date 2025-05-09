@@ -37,31 +37,53 @@ export const getCustomerBookings = () => {
 
 export const createBooking = (customer_id, unit_id, guest_name, check_in_date, check_out_date) => {
     return new Promise((resolve, reject) => {
-        // Insert the booking
-        const insertQuery = `
-            INSERT INTO bookings (customer_id, unit_id, guest_name, check_in_date, check_out_date)
-            VALUES (?, ?, ?, ?, ?);
-        `;
+        const overlapQuery = `
+            SELECT * FROM bookings
+            WHERE unit_id = ?
+            AND DATE(check_in_date) < DATE(?)
+            AND DATE(check_out_date) > DATE(?)
+            LIMIT 1;
 
-        connection.query(insertQuery, [customer_id, unit_id, guest_name, check_in_date, check_out_date], (err, result) => {
+        `;
+        connection.query(overlapQuery, [unit_id, check_out_date, check_in_date], (err, results) => {
             if (err) {
-                console.error('Error Booking:', err); // helpful logging
+                console.error("Error checking overlapping bookings:", err);
                 return reject(err);
             }
+            if (results.length > 0) {
+                return reject(new Error('OVERLAPPING_BOOKING'));
+            }
+            // Insert the booking  
+            const insertQuery = `
+                INSERT INTO bookings (
+                    customer_id, 
+                    unit_id, 
+                    guest_name, 
+                    check_in_date, 
+                    check_out_date)
+                VALUES (?, ?, ?, ?, ?);
+            `;
 
-            // If booking inserted successfully, proceed to update unit availability
-            const bookingId = result.insertId;
-            const updateQuery = 'UPDATE units SET availability = 0 WHERE id = ?';
-
-            // Make sure to update the unit's availability only after the booking insertion
-            connection.query(updateQuery, [unit_id], (updateErr) => {
-                if (updateErr) {
-                    console.error('Error updating unit availability:', updateErr);
-                    return reject(updateErr); // Reject if updating unit fails
+            connection.query(insertQuery, [customer_id, unit_id, guest_name, check_in_date, check_out_date], (err, result) => {
+                if (err) {
+                    console.error('Error Booking:', err); // helpful logging
+                    return reject(err);
                 }
 
-                // Successfully created the booking and updated unit availability
-                resolve(bookingId);
+                // If booking inserted successfully, proceed to update unit availability
+                const bookingId = result.insertId;
+                const updateQuery = 'UPDATE units SET availability = 0 WHERE id = ?';
+
+                // Make sure to update the unit's availability only after the booking insertion
+                connection.query(updateQuery, [unit_id], (updateErr) => {
+                    if (updateErr) {
+                        console.error('Error updating unit availability:', updateErr);
+                        return reject(updateErr); // Reject if updating unit fails
+                    }
+
+                    // Successfully created the booking and updated unit availability
+                    resolve(bookingId);
+                });
             });
         });
     });

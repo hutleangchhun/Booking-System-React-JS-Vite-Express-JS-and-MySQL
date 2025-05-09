@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { createBooking, updateBooking } from '../../Service/bookingApi';
+import { createBooking, updateBooking, handleAxiosErr } from '../../Service/bookingApi';
 import { fetchAllCustomers } from '../../Service/customerApi';
 import { fetchAllUnits } from '../../Service/unitApi';
 import Swal from 'sweetalert2';
@@ -68,7 +68,10 @@ const BookingForm = ({ mode, booking = {}, onSuccess }) => {
             Swal.fire('Error', 'All fields are required', 'error');
             return;
         }
-
+        if (new Date(check_in) >= new Date(check_out)) {
+            Swal.fire('Error', 'Check-in must be before check-out.', 'error');
+            return;
+        }
         try {
             if (mode === 'create') {
                 await createBooking({
@@ -86,9 +89,9 @@ const BookingForm = ({ mode, booking = {}, onSuccess }) => {
             }
             onSuccess();
         } catch (error) {
-            console.error(`${mode} error:`, error);
-            Swal.fire('Error', `Failed to ${mode} booking.`, 'error');
+            Swal.fire('Error', handleAxiosErr(error, `Failed to ${mode} booking.`), 'error');
         }
+
     };
 
     return (
@@ -127,10 +130,13 @@ const BookingForm = ({ mode, booking = {}, onSuccess }) => {
                             className="w-full border border-gray-300 bg-transparent p-2 rounded focus:outline-none"
                             required
                         >
-                            <option value="">Select Unit</option>
                             {units.map((unit) => (
-                                <option key={unit.id} value={unit.id}>
-                                    {unit.unit_name} ({unit.unit_type})
+                                <option
+                                    key={unit.id}
+                                    value={unit.id}
+                                    disabled={unit.availability === 0}
+                                >
+                                    {unit.unit_name} ({unit.unit_type}) {unit.availability === 0 ? '- Unavailable' : ''}
                                 </option>
                             ))}
                         </select>
@@ -154,7 +160,7 @@ const BookingForm = ({ mode, booking = {}, onSuccess }) => {
                 <div className='mb-4'>
                     <label className="block text-gray-700 font-semibold mb-2">Check-in</label>
                     <input
-                        type="datetime-local"
+                        type="date"
                         name="check_in"
                         value={formData.check_in}
                         onChange={handleChange}
@@ -167,7 +173,7 @@ const BookingForm = ({ mode, booking = {}, onSuccess }) => {
                 <div className='pb-4'>
                     <label className="block text-gray-700 font-semibold mb-2">Check-out</label>
                     <input
-                        type="datetime-local"
+                        type="date"
                         name="check_out"
                         value={formData.check_out}
                         onChange={handleChange}

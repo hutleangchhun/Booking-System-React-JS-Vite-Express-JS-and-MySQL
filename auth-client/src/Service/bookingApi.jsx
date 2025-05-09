@@ -8,7 +8,8 @@ const api = axios.create({
 });
 
 // Handle errors consistently
-const handleAxiosError = (error, fallbackMessage) => {
+// Base function that handles all cases
+export const handleAxiosError = (error, fallbackMessage) => {
     if (error.response) {
         const status = error.response.status;
         const message = error.response.data?.message || fallbackMessage;
@@ -16,6 +17,7 @@ const handleAxiosError = (error, fallbackMessage) => {
         if (status === 404) return `${fallbackMessage} — Not found (404)`;
         if (status === 500) return `${fallbackMessage} — Server error (500)`;
         if (status === 403 || status === 401) return `${fallbackMessage} — Unauthorized`;
+        if (status === 409) return `${fallbackMessage} — Conflict: ${message}`;
 
         return `${fallbackMessage} — (${status}) ${message}`;
     } else if (error.request) {
@@ -24,6 +26,9 @@ const handleAxiosError = (error, fallbackMessage) => {
         return `Request error: ${error.message}`;
     }
 };
+
+// Wrapper that uses the full handler (can be renamed or customized as needed)
+export const handleAxiosErr = handleAxiosError;
 
 // === User API Methods ===
 

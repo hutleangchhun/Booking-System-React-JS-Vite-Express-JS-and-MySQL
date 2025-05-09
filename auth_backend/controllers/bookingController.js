@@ -27,7 +27,6 @@ export const createBooking = async (req, res) => {
     if (!customer_id || !unit_id || !guest_name || !check_in_date || !check_out_date) {
         return res.status(400).json({ message: 'All fields are required' });
     }
-
     try {
         const bookingId = await bookingModel.createBooking(customer_id, unit_id, guest_name, check_in_date, check_out_date);
         return res.status(201).json({
@@ -35,6 +34,9 @@ export const createBooking = async (req, res) => {
             bookingId,
         });
     } catch (error) {
+        if (error.message === 'OVERLAPPING_BOOKING') {
+            return res.status(409).json({ message: 'This unit is already booked for the selected date range.' });
+        }
         console.error('Error creating booking:', error);
         return res.status(500).json({ message: 'Failed to create booking', error: error.message });
     }

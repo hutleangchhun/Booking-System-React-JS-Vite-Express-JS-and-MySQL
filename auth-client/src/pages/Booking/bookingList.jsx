@@ -28,6 +28,7 @@ const BookingList = () => {
         try {
             const data = await fetchAllBookings();
             setBookings(data);
+            console.table(data);
         } catch (error) {
             console.error('Error fetching bookings:', error);
             setError(error.message || 'Failed to fetch bookings.');
