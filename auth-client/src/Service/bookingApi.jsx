@@ -64,3 +64,12 @@ export const createBooking = async (bookingData) => {
 export const updateBooking = async (id) => {
 
 }
+
+export const countAllBooking = async () => {
+    try {
+        const res = await api.get('count');
+        return res.data.count;
+    } catch (error) {
+        throw new Error(handleAxiosError(error, 'Failed to count bookings'));
+    }
+};

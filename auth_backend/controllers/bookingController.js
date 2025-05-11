@@ -20,6 +20,16 @@ export const fetchCustomerBookings = async (req, res) => {
         sendJsonResponse(res, 500, { error: 'Failed to retrieve bookings' });
     }
 }
+export const getBookingCount = async (req, res) => {
+    try {
+        const results = await bookingModel.countAllBooking();
+        const count = results[0]?.total || 0;
+        res.json({ count });
+    } catch (err) {
+        console.error('Error fetching bookings count:', err);
+        res.status(500).json({ message: 'Failed to count bookings' });
+    }
+};
 
 export const createBooking = async (req, res) => {
     const { customer_id, unit_id, guest_name, check_in_date, check_out_date } = req.body;

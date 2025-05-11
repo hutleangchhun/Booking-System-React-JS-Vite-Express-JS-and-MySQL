@@ -1,6 +1,7 @@
 import StatCard from '../../components/Card/StateCard';
 import { countAllUsers } from '../../Service/userApi';
-import { fetchAvailableUnits } from '../../Service/unitApi.jsx';
+import { countAllUnits, fetchAllUnits, fetchAvailableUnits } from '../../Service/unitApi.jsx';
+import { countAllBooking } from '../../Service/bookingApi.jsx';
 import Icon from '../../assets/Icons/icons.jsx';
 import Welcome from '../../components/Welcome/Welcome.jsx'
 
@@ -15,23 +16,26 @@ const Dashboard = () => {
                     icon={Icon}
                     iconName="user"
                     cardColor="border-2 rounded-lg"
+                    link='/listuser'
                     linkStyle="text-sm cursor-pointer"
                 />
                 <StatCard
-                    title="Available Units"
-                    apiCall={fetchAvailableUnits}
+                    title="Total Units"
+                    apiCall={countAllUnits}
                     icon={Icon}
                     iconName="unit"
                     cardColor="border-2 rounded-lg"
+                    link='unit-list'
                     linkStyle="text-sm cursor-pointer"
 
                 />
                 <StatCard
-                    title="Booked"
-                    apiCall={countAllUsers}
+                    title="Total Booked"
+                    apiCall={countAllBooking}
                     icon={Icon}
                     iconName="taxi"
                     cardColor="border-2 rounded-lg"
+                    link='/bookinglist'
                     linkStyle="text-sm cursor-pointer"
                 />
 

@@ -129,55 +129,65 @@ const UserList = () => {
                         </tr>
                     </thead>
                     <tbody className="font-medium text-gray-700 text-sm">
-                        {currentUsers.map((user) => (
-                            <tr key={user.id} className="hover:bg-blue-50">
-                                <td className="p-3">{user.username}</td>
-                                <td className="p-3">{user.email}</td>
-                                <td className="p-3">{user.role}</td>
-                                {role === 'admin' && (
-                                    <td className="p-3">
-                                        <div className="flex justify-center items-center">
-                                            {user.isVerified ? (
-                                                <span className="text-xl">
-                                                    <Icon name="checkMark" className="text-green-500" />
-                                                </span>
-                                            ) : (
-                                                <span className="text-xl">
-                                                    <Icon name="crossMark" className="text-red-500" />
-                                                </span>
-                                            )}
-                                        </div>
-                                    </td>
-                                )}
-
-                                {role === 'admin' && (
-                                    <td className="p-3 border-b text-center space-x-2">
-                                        <button
-                                            onClick={() => handleUpdateUserClick(user.id)}
-                                            className="text-blue-500 hover:text-blue-700"
-                                        >
-                                            <Icon name="update" className="text-lg" />
-                                        </button>
-                                        <button
-                                            onClick={() => handleDelete(user.id, user.username)}
-                                            className="text-red-500 hover:text-red-700"
-                                        >
-                                            <Icon name="delete" className="text-xl" />
-                                        </button>
-                                    </td>
-                                )}
+                        {currentUsers.length === 0 ? (
+                            <tr>
+                                <td colSpan={role === 'admin' ? 6 : 5} className="p-4 text-center text-gray-500">
+                                    No User found.
+                                </td>
                             </tr>
-                        ))}
+                        ) : (
+                            currentUsers.map((user) => (
+                                <tr key={user.id} className="hover:bg-blue-50">
+                                    <td className="p-3">{user.username}</td>
+                                    <td className="p-3">{user.email}</td>
+                                    <td className="p-3">{user.role}</td>
+                                    {role === 'admin' && (
+                                        <td className="p-3">
+                                            <div className="flex justify-center items-center">
+                                                {user.isVerified ? (
+                                                    <span className="text-xl">
+                                                        <Icon name="checkMark" className="text-green-500" />
+                                                    </span>
+                                                ) : (
+                                                    <span className="text-xl">
+                                                        <Icon name="crossMark" className="text-red-500" />
+                                                    </span>
+                                                )}
+                                            </div>
+                                        </td>
+                                    )}
+
+                                    {role === 'admin' && (
+                                        <td className="p-3 border-b text-center space-x-2">
+                                            <button
+                                                onClick={() => handleUpdateUserClick(user.id)}
+                                                className="text-blue-500 hover:text-blue-700"
+                                            >
+                                                <Icon name="update" className="text-lg" />
+                                            </button>
+                                            <button
+                                                onClick={() => handleDelete(user.id, user.username)}
+                                                className="text-red-500 hover:text-red-700"
+                                            >
+                                                <Icon name="delete" className="text-xl" />
+                                            </button>
+                                        </td>
+                                    )}
+                                </tr>
+                            ))
+                        )}
                     </tbody>
                 </table>
             </div>
 
-            <Pagination
-                totalUsers={users.length}
-                usersPerPage={usersPerPage}
-                currentPage={currentPage}
-                onPageChange={handlePageChange}
-            />
+            {users.length > 0 && (
+                <Pagination
+                    totalUsers={users.length}
+                    usersPerPage={usersPerPage}
+                    currentPage={currentPage}
+                    onPageChange={handlePageChange}
+                />
+            )};
 
             {/* Create Modal */}
             <Modal isOpen={isCreateModalOpen} onClose={closeModals}>

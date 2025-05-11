@@ -124,56 +124,67 @@ const UnitList = () => {
                         </tr>
                     </thead>
                     <tbody className="font-medium text-gray-700 text-sm">
-                        {currentUnits.map((unit) => (
-                            <tr key={unit.id} className="hover:bg-blue-50">
-                                <td className="p-3">{unit.unit_name}</td>
-                                <td className="p-3">{unit.unit_type}</td>
-                                <td className="p-3 text-center">{unit.capacity}</td>
-                                <td className="p-3 text-center">
-                                    ${Number(unit.price_per_night).toFixed(2)}
+                        {currentUnits.length === 0 ? (
+                            <tr>
+                                <td colSpan={role === 'admin' ? 6 : 5} className="p-4 text-center text-gray-500">
+                                    No Units found.
                                 </td>
-                                <td className="p-3">
-                                    <div className='flex justify-center items-center'>
-                                        {unit.availability ? (
-                                            <span className='text-xl'>
-                                                <Icon name="checkMark" className="text-green-500" />
-                                            </span>
-                                        ) : (
-                                            <span className='text-xl'>
-                                                <Icon name="crossMark" className="text-red-500" />
-                                            </span>
-                                        )}
-                                    </div>
-                                </td>
-                                {role === 'admin' && (
-                                    <td className="p-3 text-center space-x-2">
-                                        <button
-                                            onClick={() => handleUpdateUnitClick(unit.id)}
-                                            className="text-blue-500 hover:text-blue-700"
-                                        >
-                                            <Icon name="update" className="text-lg" />
-                                        </button>
-
-                                        <button
-                                            onClick={() => handleDelete(unit.id, unit.unit_name)}
-                                            className="text-red-500 hover:text-red-700"
-                                        >
-                                            <Icon name="delete" className="text-xl" />
-                                        </button>
-                                    </td>
-                                )}
                             </tr>
-                        ))}
+                        ) : (
+
+                            currentUnits.map((unit) => (
+                                <tr key={unit.id} className="hover:bg-blue-50">
+                                    <td className="p-3">{unit.unit_name}</td>
+                                    <td className="p-3">{unit.unit_type}</td>
+                                    <td className="p-3 text-center">{unit.capacity}</td>
+                                    <td className="p-3 text-center">
+                                        ${Number(unit.price_per_night).toFixed(2)}
+                                    </td>
+                                    <td className="p-3">
+                                        <div className='flex justify-center items-center'>
+                                            {unit.availability ? (
+                                                <span className='text-xl'>
+                                                    <Icon name="checkMark" className="text-green-500" />
+                                                </span>
+                                            ) : (
+                                                <span className='text-xl'>
+                                                    <Icon name="crossMark" className="text-red-500" />
+                                                </span>
+                                            )}
+                                        </div>
+                                    </td>
+                                    {role === 'admin' && (
+                                        <td className="p-3 text-center space-x-2">
+                                            <button
+                                                onClick={() => handleUpdateUnitClick(unit.id)}
+                                                className="text-blue-500 hover:text-blue-700"
+                                            >
+                                                <Icon name="update" className="text-lg" />
+                                            </button>
+
+                                            <button
+                                                onClick={() => handleDelete(unit.id, unit.unit_name)}
+                                                className="text-red-500 hover:text-red-700"
+                                            >
+                                                <Icon name="delete" className="text-xl" />
+                                            </button>
+                                        </td>
+                                    )}
+                                </tr>
+                            ))
+                        )}
                     </tbody>
                 </table>
             </div>
 
-            <Pagination
-                totalUsers={units.length}
-                usersPerPage={unitsPerPage}
-                currentPage={currentPage}
-                onPageChange={handlePageChange}
-            />
+            {units.length > 0 && (
+                <Pagination
+                    totalUsers={units.length}
+                    usersPerPage={unitsPerPage}
+                    currentPage={currentPage}
+                    onPageChange={handlePageChange}
+                />
+            )}
             {/* Create Modal */}
             <Modal isOpen={isCreateModalOpen} onClose={closeModals}>
                 <UnitForm mode="create" onSuccess={() => { closeModals(); fetchUnits(); }} />

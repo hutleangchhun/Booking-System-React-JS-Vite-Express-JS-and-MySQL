@@ -28,7 +28,6 @@ const BookingList = () => {
         try {
             const data = await fetchAllBookings();
             setBookings(data);
-            console.table(data);
         } catch (error) {
             console.error('Error fetching bookings:', error);
             setError(error.message || 'Failed to fetch bookings.');
@@ -127,45 +126,55 @@ const BookingList = () => {
                         </tr>
                     </thead>
                     <tbody className="font-medium text-gray-700 text-sm">
-                        {currentBookings.map((booking) => (
-                            <tr key={booking.booking_id} className="hover:bg-blue-50">
-                                <td className="p-3">{booking.guest_name}</td>
-                                <td className="p-3">{booking.unit_name}</td>
-                                <td className="p-3">{booking.unit_type}</td>
-                                <td className="p-3">{formatDate(booking.check_in_date)}</td>
-                                <td className="p-3">{formatDate(booking.check_out_date)}</td>
-                                <td className="p-3">{formatDate(booking.created_at)}</td>
-                                {role === 'admin' && (
-                                    <td className="p-3 text-center space-x-2">
-                                        <button
-                                            onClick={() => handleUpdateBookingClick(booking.booking_id)}
-                                            className="text-blue-500 hover:text-blue-700"
-                                        >
-                                            <Icon name="update" className="text-lg" />
-                                        </button>
-                                        <button
-                                            onClick={() => {
-                                                console.log('Booking ID in Delete:', booking.booking_id);
-                                                handleDelete(booking.booking_id, booking.guest_name);
-                                            }}
-                                            className="text-red-500 hover:text-red-700"
-                                        >
-                                            <Icon name="delete" className="text-xl" />
-                                        </button>
-                                    </td>
-                                )}
+                        {currentBookings.length === 0 ? (
+                            <tr>
+                                <td colSpan={role === 'admin' ? 7 : 6} className="p-4 text-center text-gray-500">
+                                    No bookings found.
+                                </td>
                             </tr>
-                        ))}
+                        ) : (
+                            currentBookings.map((booking) => (
+                                <tr key={booking.booking_id} className="hover:bg-blue-50">
+                                    <td className="p-3">{booking.guest_name}</td>
+                                    <td className="p-3">{booking.unit_name}</td>
+                                    <td className="p-3">{booking.unit_type}</td>
+                                    <td className="p-3">{formatDate(booking.check_in_date)}</td>
+                                    <td className="p-3">{formatDate(booking.check_out_date)}</td>
+                                    <td className="p-3">{formatDate(booking.created_at)}</td>
+                                    {role === 'admin' && (
+                                        <td className="p-3 text-center space-x-2">
+                                            <button
+                                                onClick={() => handleUpdateBookingClick(booking.booking_id)}
+                                                className="text-blue-500 hover:text-blue-700"
+                                            >
+                                                <Icon name="update" className="text-lg" />
+                                            </button>
+                                            <button
+                                                onClick={() => {
+                                                    console.log('Booking ID in Delete:', booking.booking_id);
+                                                    handleDelete(booking.booking_id, booking.guest_name);
+                                                }}
+                                                className="text-red-500 hover:text-red-700"
+                                            >
+                                                <Icon name="delete" className="text-xl" />
+                                            </button>
+                                        </td>
+                                    )}
+                                </tr>
+                            ))
+                        )}
                     </tbody>
                 </table>
             </div>
 
-            <Pagination
-                totalUsers={bookings.length}
-                usersPerPage={bookingsPerPage}
-                currentPage={currentPage}
-                onPageChange={handlePageChange}
-            />
+            {bookings.length > 0 && (
+                <Pagination
+                    totalUsers={bookings.length}
+                    usersPerPage={bookingsPerPage}
+                    currentPage={currentPage}
+                    onPageChange={handlePageChange}
+                />
+            )}
 
             {/* Create Modal */}
             <Modal isOpen={isCreateModalOpen} onClose={closeModals}>

@@ -35,6 +35,20 @@ export const getCustomerBookings = () => {
     });
 };
 
+export const countAllBooking = () => {
+    return new Promise((resolve, reject) => {
+        const query = 'SELECT COUNT(*) AS total FROM bookings';
+        connection.query(query, (err, results) => {
+            if (err) return reject(err);
+            if (results && results.length > 0) {
+                resolve(results);
+            } else {
+                resolve([{ total: 0 }]);
+            }
+        });
+    })
+}
+
 export const createBooking = (customer_id, unit_id, guest_name, check_in_date, check_out_date) => {
     return new Promise((resolve, reject) => {
         const overlapQuery = `
